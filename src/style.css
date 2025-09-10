@@ -1,0 +1,114 @@
+/* style.css */
+.ogp-card {
+  /* width: min(380px, 100%); */
+  width: 500px;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  background: #fff;
+  z-index: 1000;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* 
+  .ogp-card가 존재할 때, 이 카드만 이벤트(클릭 등)가 작동하고
+  배경 등 다른 화면을 눌러도 반응이 없도록 pointer-events를 제어합니다.
+  (즉, 모달처럼 동작하게 함)
+*/
+  pointer-events: auto; /* .ogp-card 내부는 이벤트 허용 */
+}
+body:has(.ogp-card) > *:not(.ogp-card) {
+  /* .ogp-card가 있을 때, 다른 모든 요소는 이벤트 비활성화 */
+  pointer-events: none !important;
+  /* 시각적으로 흐리게 하고 싶으면 아래 주석 해제 */
+  /* filter: blur(1.5px); */
+}
+.ogp-title {
+  font: 700 16px/1.2 system-ui, "Noto Sans KR", sans-serif;
+  margin-bottom: 12px;
+}
+.ogp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+}
+.ogp-panel {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+}
+.ogp-panel h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+}
+.ogp-qr {
+  width: 160px;
+  height: 160px;
+  display: block;
+  margin: 8px auto;
+  border-radius: 8px;
+}
+.ogp-pin {
+  font: 700 26px/1 system-ui, "Noto Sans KR";
+  letter-spacing: 0.2em;
+  text-align: center;
+  padding: 10px 0;
+}
+.ogp-exp,
+.ogp-desc {
+  font: 12px/1.4 system-ui, "Noto Sans KR";
+  color: #666;
+  text-align: center;
+  margin-top: 6px;
+}
+.ogp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+}
+.ogp-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.ogp-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+.ogp-badgelite {
+  font-size: 11px;
+  color: #555;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+@media (prefers-color-scheme: dark) {
+  .ogp-card {
+    background: #111;
+    color: #f8f8f8;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+  }
+  .ogp-panel {
+    border-color: #303236;
+  }
+  .ogp-exp,
+  .ogp-desc {
+    color: #a5a5a5;
+  }
+  .ogp-badgelite {
+    background: #1f2937;
+    border-color: #374151;
+    color: #cbd5e1;
+  }
+}

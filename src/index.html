@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+  </head>
+  <body>
+    <button id="payBtn">결제하기</button>
+    <button id="payBtn2">결제하기2</button>
+    <div id="ohgoodpay-widget"></div>
+    <script src="index.js"></script>
+
+    <script>
+      document
+        .getElementById("payBtn")
+        .addEventListener("click", async function () {
+          var pay = window.OhGoodPay.init();
+          pay.mount("#ohgoodpay-widget");
+          try {
+            await pay.start({
+              orderId: "1234123",
+              totalPrice: 30000,
+              requestName: "test",
+            });
+            alert("결제 완료!");
+            location.href = "/order/complete.do?orderId=<%=orderId%>";
+          } catch (e) {
+            alert(e && e.message ? e.message : "결제 실패");
+          }
+        });
+
+      document.getElementById("payBtn2").addEventListener("click", function () {
+        console.log("결제하기2");
+      });
+    </script>
+  </body>
+</html>
