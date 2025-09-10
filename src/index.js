@@ -23,6 +23,8 @@
       requestName: null,
       pollingHandle: null,
       paymentRequestId: null,
+      payResult: false,
+      manualCheckResolve: null,
     };
 
     function mount(selector) {
@@ -43,15 +45,26 @@
                 </div>
               </div>
               <div class="ogp-desc" style="margin-top:10px">
-                두 방법 중 <b>하나</b>만 완료해도 결제가 진행됩니다.
+                <span>* 코드 유효 시간은 2분입니다.</span>
+                <span>* 결제를 마치면 창이 자동으로 닫힙니다.</span>
+                <span>* 결제 완료 후 창이 닫히지 않으면 결제 완료를 눌러주세요.</span>
               </div>
             </div>
             <div class="ogp-footer">
-              <span class="ogp-badgelite" id="ogp-exp-badge">만료 대기...</span>
+              <button id="ogp-check-btn" class="ogp-btn">결제 완료</button>
               <button id="ogp-close" class="ogp-btn">닫기</button>
             </div>
           </div>`;
-      mountedEl.querySelector("#ogp-close").onclick = onClose;
+      mountedEl.querySelector("#ogp-close").onclick = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      };
+      mountedEl.querySelector("#ogp-check-btn").onclick = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        onCheck();
+      };
     }
 
     async function start(opts) {
@@ -119,7 +132,20 @@
       // }
 
       // 결과 폴링 (둘 중 무엇이든 결제되면 완료)
-      await pollUntilDone(orderId);
+      try {
+        // 폴링과 수동 확인 중 하나가 완료되면 종료
+        await Promise.race([
+          pollUntilDone(orderId),
+          new Promise((resolve) => {
+            state.manualCheckResolve = resolve;
+          }),
+        ]);
+        onClose();
+        return state.payResult;
+      } catch (error) {
+        console.error("결제 폴링 중 오류:", error);
+        return false;
+      }
     }
 
     async function createCode({ orderId, totalPrice, requestName }) {
@@ -155,6 +181,63 @@
       mountedEl.innerHTML = "";
     }
 
+    async function onCheck() {
+      try {
+        const res = await fetch(
+          "http://localhost:8080/api/payment/check/" +
+            encodeURIComponent(state.orderId),
+          {
+            method: "GET",
+          }
+        );
+        if (!res.ok) throw new Error("결제 확인 실패");
+        const s = await res.json(); // { success, result?: boolean }
+        if (s.success && typeof s.result === "boolean") {
+          if (s.result) {
+            state.payResult = true;
+            // 폴링 중단
+            if (state.pollingHandle) {
+              clearInterval(state.pollingHandle);
+              state.pollingHandle = null;
+            }
+            // 결제 완료 시에는 UI만 정리 (만료 처리 API 호출 안함)
+            if (mountedEl) {
+              mountedEl.innerHTML = "";
+            }
+            // 수동 확인 완료 신호
+            if (state.manualCheckResolve) {
+              state.manualCheckResolve();
+            }
+          } else {
+            state.payResult = false;
+            // 결제 실패 시에는 만료 처리
+            onClose();
+            // 수동 확인 완료 신호
+            if (state.manualCheckResolve) {
+              state.manualCheckResolve();
+            }
+          }
+        } else {
+          state.payResult = false;
+          // 결제 실패 시에는 만료 처리
+          onClose();
+          // 수동 확인 완료 신호
+          if (state.manualCheckResolve) {
+            state.manualCheckResolve();
+          }
+        }
+      } catch (e) {
+        state.payResult = false;
+        alert("결제 확인 중 오류가 발생했습니다.");
+        // 오류 시에는 만료 처리
+        onClose();
+        // 수동 확인 완료 신호
+        if (state.manualCheckResolve) {
+          state.manualCheckResolve();
+        }
+      }
+    }
+
     async function pollUntilDone(orderId) {
       const bodyEl = mountedEl.querySelector("#ogp-body");
       return new Promise(function (resolve, reject) {
@@ -178,8 +261,11 @@
                   "beforeend",
                   `<div class="ogp-desc" style="margin-top:8px">결제 완료</div>`
                 );
+                state.payResult = true;
                 resolve();
               } else {
+                clearInterval(state.pollingHandle);
+                state.payResult = false;
                 onClose();
                 reject(new Error("결제 실패"));
               }
@@ -187,6 +273,7 @@
             if (elapsed > 120000) {
               // 2분
               clearInterval(state.pollingHandle);
+              state.payResult = false;
               onClose();
               reject(new Error("결제 시간 초과"));
             }

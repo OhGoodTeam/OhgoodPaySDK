@@ -19,13 +19,14 @@
           var pay = window.OhGoodPay.init();
           pay.mount("#ohgoodpay-widget");
           try {
-            await pay.start({
-              orderId: "1234123",
-              totalPrice: 30000,
+            const result = await pay.start({
+              orderId: "12341hjsbdcjasbdk23",
+              totalPrice: 1000,
               requestName: "test",
             });
-            alert("결제 완료!");
-            location.href = "/order/complete.do?orderId=<%=orderId%>";
+            // alert(result ? "결제 완료!" : "결제 실패");
+            console.log(result);
+            // location.href = "/order/complete.do?orderId=<%=orderId%>";
           } catch (e) {
             alert(e && e.message ? e.message : "결제 실패");
           }

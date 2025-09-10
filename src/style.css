@@ -33,12 +33,16 @@ body:has(.ogp-card) > *:not(.ogp-card) {
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   border-radius: 20px;
-  background-color: #f2f2f2;
 }
 .ogp-panel {
   border: 1px solid #e5e7eb;
+  background-color: #f2f2f2;
   border-radius: 12px;
   padding: 12px;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 .ogp-panel h4 {
   margin: 0 0 8px 0;
@@ -56,6 +60,12 @@ body:has(.ogp-card) > *:not(.ogp-card) {
   letter-spacing: 0.2em;
   text-align: center;
   padding: 10px 0;
+  width: 160px;
+  height: 160px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 .ogp-exp,
 .ogp-desc {
@@ -63,6 +73,10 @@ body:has(.ogp-card) > *:not(.ogp-card) {
   color: #666;
   text-align: center;
   margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
 }
 .ogp-btn {
   display: inline-flex;
