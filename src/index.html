@@ -10,9 +10,10 @@
     <button id="payBtn">결제하기</button>
     <button id="payBtn2">결제하기2</button>
     <div id="ohgoodpay-widget"></div>
-    <script src="index.js"></script>
+    <script src="index.js" data-api-base-url="http://localhost:8080"></script>
 
     <script>
+      const orderId = crypto.randomUUID();
       document
         .getElementById("payBtn")
         .addEventListener("click", async function () {
@@ -20,12 +21,11 @@
           pay.mount("#ohgoodpay-widget");
           try {
             const result = await pay.start({
-              orderId: "12341hjsbdcjasbdk23",
+              orderId: orderId,
               totalPrice: 1000,
               requestName: "test",
             });
-            // alert(result ? "결제 완료!" : "결제 실패");
-            console.log(result);
+            alert(result ? "결제 성공" : "결제 실패");
             // location.href = "/order/complete.do?orderId=<%=orderId%>";
           } catch (e) {
             alert(e && e.message ? e.message : "결제 실패");

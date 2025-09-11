@@ -13,6 +13,8 @@
   }
 })();
 
+// import "./style.css";
+
 (function () {
   function init(_opts) {
     let mountedEl = null;
@@ -26,6 +28,18 @@
       payResult: false,
       manualCheckResolve: null,
     };
+
+    // HTML에서 API base URL 가져오기
+    function getApiBaseUrl() {
+      const script = document.querySelector('script[src="index.js"]');
+      const apiBaseUrl = script
+        ? script.getAttribute("data-api-base-url")
+        : null;
+      if (!apiBaseUrl) {
+        throw new Error("data-api-base-url 속성이 설정되지 않았습니다.");
+      }
+      return apiBaseUrl;
+    }
 
     function mount(selector) {
       mountedEl = document.querySelector(selector);
@@ -144,6 +158,7 @@
         return state.payResult;
       } catch (error) {
         console.error("결제 폴링 중 오류:", error);
+        onClose();
         return false;
       }
     }
@@ -153,7 +168,8 @@
         crypto && crypto.randomUUID
           ? crypto.randomUUID()
           : String(Date.now()) + Math.random();
-      const r = await fetch("http://localhost:8080/api/payment/requestment", {
+      const apiBaseUrl = getApiBaseUrl();
+      const r = await fetch(`${apiBaseUrl}/api/payment/requestment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -167,9 +183,9 @@
 
     async function onClose() {
       // 만료 처리: 두 코드 모두 시도
-
+      const apiBaseUrl = getApiBaseUrl();
       const r = await fetch(
-        "http://localhost:8080/api/payment/expiration/" +
+        `${apiBaseUrl}/api/payment/expiration/` +
           encodeURIComponent(state.paymentRequestId),
         {
           method: "POST",
@@ -183,8 +199,9 @@
 
     async function onCheck() {
       try {
+        const apiBaseUrl = getApiBaseUrl();
         const res = await fetch(
-          "http://localhost:8080/api/payment/check/" +
+          `${apiBaseUrl}/api/payment/check/` +
             encodeURIComponent(state.orderId),
           {
             method: "GET",
@@ -211,7 +228,6 @@
           } else {
             state.payResult = false;
             // 결제 실패 시에는 만료 처리
-            onClose();
             // 수동 확인 완료 신호
             if (state.manualCheckResolve) {
               state.manualCheckResolve();
@@ -220,7 +236,6 @@
         } else {
           state.payResult = false;
           // 결제 실패 시에는 만료 처리
-          onClose();
           // 수동 확인 완료 신호
           if (state.manualCheckResolve) {
             state.manualCheckResolve();
@@ -230,7 +245,6 @@
         state.payResult = false;
         alert("결제 확인 중 오류가 발생했습니다.");
         // 오류 시에는 만료 처리
-        onClose();
         // 수동 확인 완료 신호
         if (state.manualCheckResolve) {
           state.manualCheckResolve();
@@ -245,8 +259,9 @@
         state.pollingHandle = setInterval(async function () {
           try {
             elapsed += 1500;
+            const apiBaseUrl = getApiBaseUrl();
             const res = await fetch(
-              "http://localhost:8080/api/payment/check/" +
+              `${apiBaseUrl}/api/payment/check/` +
                 encodeURIComponent(state.orderId),
               {
                 method: "GET",
