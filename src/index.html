@@ -13,17 +13,17 @@
     <script src="index.js" data-api-base-url="http://localhost:8080"></script>
 
     <script>
-      const orderId = crypto.randomUUID();
       document
         .getElementById("payBtn")
         .addEventListener("click", async function () {
+          const orderId = crypto.randomUUID();
           var pay = window.OhGoodPay.init();
           pay.mount("#ohgoodpay-widget");
           try {
             const result = await pay.start({
               orderId: orderId,
               totalPrice: 1000,
-              requestName: "test",
+              requestName: "",
             });
             alert(result ? "결제 성공" : "결제 실패");
             // location.href = "/order/complete.do?orderId=<%=orderId%>";
