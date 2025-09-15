@@ -6,7 +6,7 @@
 (function loadStyle() {
   // 이미 style.css가 로드되어 있는지 확인
   if (!document.querySelector('link[href="style.css"]')) {
-    const link = document.createElement("link");
+    const link = document.createElement("link"); 
     link.rel = "stylesheet";
     link.href = "style.css";
     document.head.appendChild(link);
@@ -108,16 +108,17 @@
       if (result[0].status === "fulfilled" && result[0].value.success) {
         state.qrCode = {
           paymentRequestId: result[0].value.paymentRequestId,
-          qrImageUrl: result[0].value.qrImageUrl,
-          // expiresAt: result[0].value.expiresAt,
+          qrImageUrl: result[0].value.qrImageUrl
         };
         const q = state.qrCode;
         qrPanel.innerHTML = `
-            <h4>QR로 결제</h4>
-            <img class="ogp-qr" src="${q.qrImageUrl}" alt="결제 QR" />`;
+          <h4>QR로 결제</h4>
+          <img class="ogp-qr" src="${q.qrImageUrl}" alt="결제 QR" />
+        `;
       } else {
         qrPanel.innerHTML = `<h4>QR로 결제</h4><div class="ogp-desc">QR 생성 실패</div>`;
       }
+
 
       // PIN 렌더
       if (result[0].status === "fulfilled" && result[0].value.success) {
