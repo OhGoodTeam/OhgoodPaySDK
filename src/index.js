@@ -5,10 +5,15 @@
 
 (function loadStyle() {
   // 이미 style.css가 로드되어 있는지 확인
-  if (!document.querySelector('link[href="style.css"]')) {
-    const link = document.createElement("link"); 
+  if (
+    !document.querySelector(
+      'link[href="https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/sdk/style.min.css"]'
+    )
+  ) {
+    const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "style.css";
+    link.href =
+      "https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/sdk/style.min.css";
     document.head.appendChild(link);
   }
 })();
@@ -31,7 +36,9 @@
 
     // HTML에서 API base URL 가져오기
     function getApiBaseUrl() {
-      const script = document.querySelector('script[src="index.js"]');
+      const script = document.querySelector(
+        'script[src="https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/sdk/pay.min.js"]'
+      );
       const apiBaseUrl = script
         ? script.getAttribute("data-api-base-url")
         : null;
@@ -108,7 +115,7 @@
       if (result[0].status === "fulfilled" && result[0].value.success) {
         state.qrCode = {
           paymentRequestId: result[0].value.paymentRequestId,
-          qrImageUrl: result[0].value.qrImageUrl
+          qrImageUrl: result[0].value.qrImageUrl,
         };
         const q = state.qrCode;
         qrPanel.innerHTML = `
@@ -118,7 +125,6 @@
       } else {
         qrPanel.innerHTML = `<h4>QR로 결제</h4><div class="ogp-desc">QR 생성 실패</div>`;
       }
-
 
       // PIN 렌더
       if (result[0].status === "fulfilled" && result[0].value.success) {
