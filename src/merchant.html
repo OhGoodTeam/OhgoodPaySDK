@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>화장품 결제 페이지</title>
+    <link rel="stylesheet" href="merchant.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="checkout-grid">
+        <!-- Left Column - Product Details -->
+        <div class="product-section">
+          <!-- Product Image -->
+          <div class="product-image-container">
+            <span class="image-placeholder">상품 이미지</span>
+          </div>
+
+          <!-- Product Info -->
+          <div class="product-info">
+            <div class="product-header">
+              <p class="brand-name">뷰티브랜드</p>
+              <h1 class="product-name">프리미엄 비타민 C 세럼 에센스 30ml</h1>
+            </div>
+
+            <div class="rating-section">
+              <div class="rating">
+                <span class="star">★</span>
+                <span class="rating-value">4.8</span>
+              </div>
+              <span class="review-count">(2,847개 리뷰)</span>
+            </div>
+
+            <div class="price-section">
+              <span class="original-price">120,000원</span>
+              <span class="current-price">89,000원</span>
+              <span class="discount-badge">26% 할인</span>
+            </div>
+
+            <p class="product-description">
+              순수 비타민 C 20% 함유로 피부 톤 개선과 안티에이징에 효과적인
+              프리미엄 세럼입니다. 하이알루론산과 나이아신아마이드가 추가로
+              함유되어 보습과 진정 효과까지 제공합니다.
+            </p>
+
+            <!-- Quantity Selection -->
+            <div class="quantity-section">
+              <label class="quantity-label">수량</label>
+              <div class="quantity-controls">
+                <button class="quantity-btn minus" onclick="updateQuantity(-1)">
+                  -
+                </button>
+                <span class="quantity-display" id="quantity">1</span>
+                <button class="quantity-btn plus" onclick="updateQuantity(1)">
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Checkout Forms -->
+        <div class="checkout-section">
+          <!-- Order Summary -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">주문 요약</h3>
+            </div>
+            <div class="card-content">
+              <div class="order-item">
+                <div class="item-image-placeholder">이미지</div>
+                <div class="item-details">
+                  <p class="item-brand">뷰티브랜드</p>
+                  <h4 class="item-name">프리미엄 비타민 C 세럼 에센스 30ml</h4>
+                  <p class="item-quantity-price">
+                    <span id="item-quantity">1</span>개 × 89,000원
+                  </p>
+                </div>
+              </div>
+
+              <div class="price-breakdown">
+                <div class="price-row">
+                  <span>상품금액</span>
+                  <span id="subtotal">89,000원</span>
+                </div>
+                <div class="price-row">
+                  <span>배송비</span>
+                  <span>3,000원</span>
+                </div>
+                <div class="separator"></div>
+                <div class="price-row total">
+                  <span>총 결제금액</span>
+                  <span class="total-price" id="total">92,000원</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping Information -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">배송 정보</h3>
+            </div>
+            <div class="card-content">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="name">받는 사람</label>
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="이름을 입력하세요"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="phone">연락처</label>
+                  <input type="text" id="phone" placeholder="010-0000-0000" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="zipCode">우편번호</label>
+                <div class="zip-input-group">
+                  <input type="text" id="zipCode" placeholder="우편번호" />
+                  <button class="address-search-btn">주소검색</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="address">주소</label>
+                <input
+                  type="text"
+                  id="address"
+                  placeholder="주소를 입력하세요"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="detailAddress">상세주소</label>
+                <input
+                  type="text"
+                  id="detailAddress"
+                  placeholder="상세주소를 입력하세요"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">결제 방법</h3>
+            </div>
+            <div class="card-content">
+              <div class="payment-options">
+                <div class="payment-option">
+                  <input
+                    type="radio"
+                    id="card"
+                    name="payment"
+                    value="card"
+                    checked
+                  />
+                  <label for="card" class="payment-label">
+                    <span class="payment-icon">💳</span>
+                    신용카드
+                  </label>
+                </div>
+                <div class="payment-option">
+                  <input type="radio" id="bank" name="payment" value="bank" />
+                  <label for="bank" class="payment-label">
+                    <span class="payment-icon">💰</span>
+                    무통장입금
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Button -->
+          <button class="payment-btn" onclick="processPayment()">
+            <span id="payment-amount">92,000원</span> 결제하기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="scripts/checkout.js"></script>
+  </body>
+</html>

@@ -26,7 +26,7 @@
             const result = await pay.start({
               orderId: orderId,
               totalPrice: 1000,
-              requestName: "",
+              requestName: "위젯 테스트",
             });
             alert(result ? "결제 성공" : "결제 실패");
             // location.href = "/order/complete.do?orderId=<%=orderId%>";
