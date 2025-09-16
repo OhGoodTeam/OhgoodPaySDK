@@ -12,10 +12,9 @@
         <!-- Left Column - Product Details -->
         <div class="product-section">
           <!-- Product Image -->
-          <div class="product-image-container">
-            <span class="image-placeholder">상품 이미지</span>
-          </div>
-
+          <div class="product-image-container"><!-- Product Image -->
+            <img src="./products.png" alt="프리미엄 비타민 C 세럼 에센스" class="product-image" />
+          </div>          
           <!-- Product Info -->
           <div class="product-info">
             <div class="product-header">
@@ -68,7 +67,7 @@
             </div>
             <div class="card-content">
               <div class="order-item">
-                <div class="item-image-placeholder">이미지</div>
+                <img src="./products.png" alt="프리미엄 비타민 C 세럼 에센스" class="item-image-placeholder" />
                 <div class="item-details">
                   <p class="item-brand">뷰티브랜드</p>
                   <h4 class="item-name">프리미엄 비타민 C 세럼 에센스 30ml</h4>
@@ -95,56 +94,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Shipping Information -->
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">배송 정보</h3>
-            </div>
-            <div class="card-content">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="name">받는 사람</label>
-                  <input
-                    type="text"
-                    id="name"
-                    placeholder="이름을 입력하세요"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="phone">연락처</label>
-                  <input type="text" id="phone" placeholder="010-0000-0000" />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="zipCode">우편번호</label>
-                <div class="zip-input-group">
-                  <input type="text" id="zipCode" placeholder="우편번호" />
-                  <button class="address-search-btn">주소검색</button>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="address">주소</label>
-                <input
-                  type="text"
-                  id="address"
-                  placeholder="주소를 입력하세요"
-                />
-              </div>
-
-              <div class="form-group">
-                <label for="detailAddress">상세주소</label>
-                <input
-                  type="text"
-                  id="detailAddress"
-                  placeholder="상세주소를 입력하세요"
-                />
-              </div>
-            </div>
-          </div>
-
           <!-- Payment Method -->
           <div class="card">
             <div class="card-header">
@@ -166,6 +115,13 @@
                   </label>
                 </div>
                 <div class="payment-option">
+                  <input type="radio" id="ohgoodpay" name="payment" value="ohgoodpay" />
+                  <label for="ohgoodpay" class="payment-label">
+                    <span class="payment-icon">💳</span>
+                    오굿페이
+                  </label>
+                </div>
+                <div class="payment-option">
                   <input type="radio" id="bank" name="payment" value="bank" />
                   <label for="bank" class="payment-label">
                     <span class="payment-icon">💰</span>
@@ -183,7 +139,55 @@
         </div>
       </div>
     </div>
+  <div id="ohgoodpay-widget" class="ogp-modal"></div>
+<script
+  src="https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/sdk/pay.min.js"
+  data-api-base-url="http://localhost:8080"
+></script>
+<script>
+async function processPayment() {
+  const selected = document.querySelector('input[name="payment"]:checked').value;
+  const widget = document.getElementById("ohgoodpay-widget");
 
-    <script src="scripts/checkout.js"></script>
+  if (selected === "ohgoodpay") {
+    widget.style.display = "flex"; // 배경 포함 모달 보이기
+    const orderId = crypto.randomUUID();
+    const pay = window.OhGoodPay.init();
+    pay.mount("#ohgoodpay-widget");
+
+    // 닫기 버튼을 모달 안에서 찾아서 이벤트 연결
+    setTimeout(() => {
+      const closeBtn = widget.querySelector("#ogp-close");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+          widget.style.display = "none"; // 모달 통째로 닫기
+        });
+      }
+    }, 200); // mount 직후에 닫기 버튼이 생기므로 약간의 지연 필요
+
+    try {
+      const result = await pay.start({
+        orderId,
+        totalPrice: 92000,
+        requestName: "프리미엄 비타민 C 세럼 결제"
+      });
+
+      if (result) {
+        //alert("결제 성공!");
+        window.location.href = "success.html";
+      } else {
+        alert("결제 실패");
+      }
+
+      widget.style.display = "none"; // 완료 후 모달 닫기
+    } catch (e) {
+      alert(e.message || "결제 중 오류 발생");
+      widget.style.display = "none"; // 오류 시도 닫기
+    }
+  }
+}
+</script>
+
   </body>
+
 </html>

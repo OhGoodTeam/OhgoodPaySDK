@@ -208,12 +208,13 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
 /* Grid Layout */
 .checkout-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 2rem;
   margin-top: 1.5rem;
 }
@@ -230,6 +231,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 300px;
 }
 
 .product-image-container {
@@ -240,6 +242,7 @@ body {
   align-items: center;
   justify-content: center;
   color: #6b7280;
+  height:300px;
 }
 
 .image-placeholder {
@@ -377,6 +380,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 500px;
 }
 
 /* Card Components */
@@ -608,3 +612,21 @@ body {
     padding: 0.5rem;
   }
 }
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.ogp-modal {
+  display: none; /* 처음엔 숨김 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  z-index: 9999; /* 최상단 */
+  justify-content: center;
+  align-items: center;
+}
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 완료 - 화장품 결제 페이지</title>
+    <link rel="stylesheet" href="./success.css">
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-content">
+            <!-- Success Message -->
+            <div class="success-message">
+                <div class="success-icon">
+                    <span class="checkmark">✓</span>
+                </div>
+                <div class="success-text">
+                    <h1 class="success-title">구매에 성공했습니다!</h1>
+                    <p class="success-description">
+                        주문이 정상적으로 처리되었습니다. 주문 내역을 확인해 주세요.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Order Information Card -->
+            <div class="order-card">
+                <div class="order-content">
+                    <!-- Order Number -->
+                    <div class="order-number-section">
+                        <p class="order-number-label">주문번호</p>
+                        <p class="order-number-value" id="orderNumber">ORD-2024-001</p>
+                    </div>
+
+                    <!-- Product Information -->
+                    <div class="product-section">
+                        <h3 class="section-title">
+                            <span class="package-icon">📦</span>
+                            주문 상품
+                        </h3>
+                        
+                        <div class="product-item">
+                            <img src="./products.png" alt="프리미엄 비타민 C 세럼 에센스" class="product-image-placeholder" />
+                            <div class="product-details">
+                                <p class="product-brand" id="productBrand">뷰티브랜드</p>
+                                <h4 class="product-name" id="productName">프리미엄 비타민 C 세럼 에센스 30ml</h4>
+                                <div class="product-price-info">
+                                    <span class="product-quantity">수량: <span id="productQuantity">1</span>개</span>
+                                    <span class="product-price" id="productPrice">89,000원</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price Breakdown -->
+                    <div class="price-section">
+                        <div class="price-row">
+                            <span>상품금액</span>
+                            <span id="subtotalAmount">89,000원</span>
+                        </div>
+                        <div class="price-row">
+                            <span>배송비</span>
+                            <span id="shippingAmount">3,000원</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price-row total-row">
+                            <span>총 결제금액</span>
+                            <span class="total-amount" id="totalAmount">92,000원</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-outline" onclick="goHome()">
+                    <span class="home-icon">🏠</span>
+                    홈으로 돌아가기
+                </button>
+                <button class="btn btn-primary" onclick="viewOrders()">
+                    주문 내역 보기
+                </button>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="additional-info">
+                <p>주문 관련 문의사항이 있으시면 고객센터로 연락해 주세요.</p>
+                <p class="contact-info">고객센터: 1588-0000 (평일 09:00~18:00)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo button to go back to checkout -->
+    <div class="demo-button">
+        <button onclick="goToCheckout()" class="demo-btn">
+            결제 페이지로 돌아가기
+        </button>
+    </div>
+
+    <script src="scripts/success.js"></script>
+</body>
+</html>
