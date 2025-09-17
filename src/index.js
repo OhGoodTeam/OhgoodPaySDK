@@ -176,7 +176,7 @@
           ? crypto.randomUUID()
           : String(Date.now()) + Math.random();
       const apiBaseUrl = getApiBaseUrl();
-      const r = await fetch(`${apiBaseUrl}/api/payment/requestment`, {
+      const r = await fetch(`${apiBaseUrl}/api/public/payment/requestment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -192,7 +192,7 @@
       // 만료 처리: 두 코드 모두 시도
       const apiBaseUrl = getApiBaseUrl();
       const r = await fetch(
-        `${apiBaseUrl}/api/payment/expiration/` +
+        `${apiBaseUrl}/api/public/payment/expiration/` +
           encodeURIComponent(state.paymentRequestId),
         {
           method: "POST",
@@ -208,7 +208,7 @@
       try {
         const apiBaseUrl = getApiBaseUrl();
         const res = await fetch(
-          `${apiBaseUrl}/api/payment/check/` +
+          `${apiBaseUrl}/api/public/payment/check/` +
             encodeURIComponent(state.orderId),
           {
             method: "GET",
