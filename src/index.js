@@ -268,7 +268,7 @@
             elapsed += 1500;
             const apiBaseUrl = getApiBaseUrl();
             const res = await fetch(
-              `${apiBaseUrl}/api/payment/check/` +
+              `${apiBaseUrl}/api/public/payment/check/` +
                 encodeURIComponent(state.orderId),
               {
                 method: "GET",
